@@ -1,0 +1,39 @@
+{
+  "seed": 42,
+  "n_employees": 500,
+  "start_date": "2021-01-01",
+  "as_of_date": "2026-09-22",
+  "termination_rate": 0.15,
+  "transfer_rate": 0.06,
+  "vest_quarters": 16,
+  "vest_months": [
+    3,
+    6,
+    9,
+    12
+  ],
+  "vest_day": 15,
+  "refresh_month": 3,
+  "refresh_day": 1,
+  "error_rate": 0.03,
+  "ticker": "NVDA",
+  "price_source": "yfinance (NVDA, split-adjusted)",
+  "row_counts": {
+    "hris_employees.csv": 500,
+    "grants.csv": 1610,
+    "vest_schedule_truth.csv": 25760,
+    "broker_releases.csv": 13745,
+    "payroll_rsu.csv": 13629,
+    "prices.csv": 1445,
+    "_answer_key_injected_errors.csv": 406
+  },
+  "errors_by_type": {
+    "POST_TERM_RELEASE": 58,
+    "DUPLICATE_RELEASE": 58,
+    "STALE_FMV_PAYROLL": 58,
+    "WITHHOLDING_ROUNDING": 58,
+    "MISSING_PAYROLL": 58,
+    "ID_FORMAT_MISMATCH": 58,
+    "STALE_COUNTRY": 58
+  }
+}

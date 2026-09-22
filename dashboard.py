@@ -22,7 +22,11 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
+_ROOT = Path(__file__).resolve().parent
+# data/ (Stage 1 output) is gitignored and local-only. When it's not present -
+# e.g. on Streamlit Community Cloud, which only has what's committed - fall
+# back to the committed sample_data/ snapshot so the deployed app still works.
+DATA_DIR = _ROOT / "data" if (_ROOT / "data").exists() else _ROOT / "sample_data"
 
 st.set_page_config(page_title="Vest-Event Readiness", layout="wide")
 
