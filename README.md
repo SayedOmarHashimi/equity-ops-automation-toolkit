@@ -69,5 +69,5 @@ Output lands in `data/`. The same seed always produces the same dataset.
 - [x] Stage 3: dbt models with business-rule tests as automated controls
 - [x] Stage 4: ESPP purchase calculator (lookback, 15% discount, $25K limit)
 - [x] Stage 5: LLM exception triage and an employee equity FAQ agent
-- [ ] Stage 6: vest-event readiness dashboard
+- [x] Stage 6: vest-event readiness dashboard
 - [ ] Docs: process map, controls matrix, SOP
