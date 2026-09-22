@@ -1,0 +1,3 @@
+pandas>=2.0
+numpy>=1.24
+yfinance>=0.2   # optional: real NVDA prices. Without it (or with --offline), prices are simulated.
