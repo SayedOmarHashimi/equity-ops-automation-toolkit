@@ -68,6 +68,6 @@ Output lands in `data/`. The same seed always produces the same dataset.
 - [x] Stage 2: reconciliation engine (Python/SQL) scored against the answer key
 - [x] Stage 3: dbt models with business-rule tests as automated controls
 - [x] Stage 4: ESPP purchase calculator (lookback, 15% discount, $25K limit)
-- [ ] Stage 5: LLM exception triage and an employee equity FAQ agent
+- [x] Stage 5: LLM exception triage and an employee equity FAQ agent
 - [ ] Stage 6: vest-event readiness dashboard
 - [ ] Docs: process map, controls matrix, SOP
