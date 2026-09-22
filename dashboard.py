@@ -19,8 +19,16 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import altair as alt
 import pandas as pd
 import streamlit as st
+
+REPO_URL = "https://github.com/SayedOmarHashimi/equity-ops-automation-toolkit"
+
+# Status palette: severity is a state (bad -> good), not a category, so it's
+# colored with fixed status hues rather than arbitrary categorical colors.
+SEVERITY_COLORS = {"High": "#d03b3b", "Medium": "#fab219", "Low": "#0ca30c"}
+SEVERITY_ORDER = ["High", "Medium", "Low"]
 
 _ROOT = Path(__file__).resolve().parent
 # data/ (Stage 1 output) is gitignored and local-only. When it's not present -
@@ -58,14 +66,35 @@ def load_data():
 vest, hris, prices, exceptions, espp, meta = load_data()
 
 st.title("Vest-Event Readiness Dashboard")
+
+st.markdown(
+    "This dashboard simulates what a **Stock Administration** team checks before an RSU "
+    "vest date. Every quarter, employee stock grants vest on a schedule, and three separate "
+    "systems - HR, the stock plan's broker, and payroll - each record their own version of "
+    "who got shares and how much tax was withheld. When those systems disagree, it's usually "
+    "found by hand, under deadline pressure. This tool automates that check: it shows how much "
+    "is coming due at the next vest date, flags disagreements between the three systems as "
+    "**exceptions** (each ranked by an AI model into a severity), and tracks Employee Stock "
+    "Purchase Plan (ESPP) activity."
+)
+st.info(
+    "**All data on this page is synthetic** - employee names, dollar amounts, and "
+    "exceptions are all generated for demonstration, not a real company. "
+    f"[Full source, pipeline, and docs on GitHub]({REPO_URL}).",
+    icon="ℹ️",
+)
 if meta.get("as_of_date"):
     st.caption(f"Data as of {meta['as_of_date']} (Stage 1 generator run date)")
+
+st.divider()
 
 # ---------------------------------------------------------------------------
 # Next vest event
 # ---------------------------------------------------------------------------
 
 st.header("Next vest event")
+st.caption("Headcount, shares, and dollar exposure for the next scheduled RSU vesting date, "
+          "so the team can size the work ahead of time instead of finding out on the day.")
 
 upcoming = vest[vest["status"] == "UNVESTED"]
 if upcoming.empty:
@@ -99,6 +128,10 @@ else:
 # ---------------------------------------------------------------------------
 
 st.header("Exceptions backlog")
+st.caption("Automated checks compare the HR, broker, and payroll extracts and flag every "
+          "disagreement. Each one is triaged by Claude into a severity, so the team knows "
+          "what to work first - High means real financial/compliance risk, Low is usually "
+          "cent-level rounding noise.")
 
 if exceptions.empty:
     st.info("No exceptions.csv found. Run reconcile.py (and optionally triage_exceptions.py) first.")
@@ -113,12 +146,41 @@ else:
         c3.metric("Medium severity", f"{int(counts.get('Medium', 0)):,}")
         c4.metric("Low severity", f"{int(counts.get('Low', 0)):,}")
 
-        chart_data = exceptions.groupby(["error_type", "severity"]).size().unstack(fill_value=0)
-        st.bar_chart(chart_data)
+        chart_data = exceptions.groupby(["error_type", "severity"]).size().reset_index(name="count")
+        order = (exceptions["error_type"].value_counts().index.tolist())
+        chart = (
+            alt.Chart(chart_data)
+            .mark_bar()
+            .encode(
+                y=alt.Y("error_type:N", sort=order, title=None,
+                       axis=alt.Axis(labelLimit=200, labelFontSize=12)),
+                x=alt.X("count:Q", title="Exceptions"),
+                color=alt.Color("severity:N", title="Severity",
+                                scale=alt.Scale(domain=SEVERITY_ORDER,
+                                                range=[SEVERITY_COLORS[s] for s in SEVERITY_ORDER])),
+                order=alt.Order("severity:N", sort="ascending"),
+                tooltip=["error_type:N", "severity:N", "count:Q"],
+            )
+            .properties(height=32 * chart_data["error_type"].nunique() + 40)
+        )
+        st.altair_chart(chart, use_container_width=True)
     else:
         st.metric("Total exceptions", f"{len(exceptions):,}")
         st.caption("Run triage_exceptions.py for severity classification and root-cause detail.")
-        st.bar_chart(exceptions["error_type"].value_counts())
+        counts = exceptions["error_type"].value_counts().reset_index()
+        counts.columns = ["error_type", "count"]
+        chart = (
+            alt.Chart(counts)
+            .mark_bar(color=SEVERITY_COLORS["Medium"])
+            .encode(
+                y=alt.Y("error_type:N", sort="-x", title=None,
+                       axis=alt.Axis(labelLimit=200, labelFontSize=12)),
+                x=alt.X("count:Q", title="Exceptions"),
+                tooltip=["error_type:N", "count:Q"],
+            )
+            .properties(height=32 * len(counts) + 40)
+        )
+        st.altair_chart(chart, use_container_width=True)
 
     st.subheader("Filter")
     col1, col2 = st.columns(2)
@@ -141,6 +203,8 @@ else:
 # ---------------------------------------------------------------------------
 
 st.header("ESPP snapshot")
+st.caption("Employee Stock Purchase Plan activity: employees buy company stock at a 15% "
+          "discount off the lower of two prices (a \"lookback\"), capped at $25k/year by IRS rule.")
 
 if espp.empty:
     st.info("No espp_purchases.csv found. Run espp_calculator.py first.")
