@@ -65,7 +65,7 @@ Output lands in `data/`. The same seed always produces the same dataset.
 ## Roadmap
 
 - [x] Stage 1: synthetic data generator with an answer key
-- [ ] Stage 2: reconciliation engine (Python/SQL) scored against the answer key
+- [x] Stage 2: reconciliation engine (Python/SQL) scored against the answer key
 - [ ] Stage 3: dbt models with business-rule tests as automated controls
 - [ ] Stage 4: ESPP purchase calculator (lookback, 15% discount, $25K limit)
 - [ ] Stage 5: LLM exception triage and an employee equity FAQ agent
