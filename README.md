@@ -62,6 +62,12 @@ Output lands in `data/`. The same seed always produces the same dataset.
 - **Grant types.** No promotion grants, performance awards, or leaves of absence yet.
 - **Mobility.** A transfer moves 100% of the taxation to the new country. In reality, income that vests after a move is often split between countries based on where the work was done.
 
+## Docs
+
+- [Process map](docs/process-map.md) - pipeline architecture diagram and the quarterly vest cycle
+- [Controls matrix](docs/controls-matrix.md) - every error type mapped to its Python and dbt control
+- [SOP](docs/sop.md) - step-by-step runbook for running the toolkit and triaging what it finds
+
 ## Roadmap
 
 - [x] Stage 1: synthetic data generator with an answer key
@@ -70,4 +76,4 @@ Output lands in `data/`. The same seed always produces the same dataset.
 - [x] Stage 4: ESPP purchase calculator (lookback, 15% discount, $25K limit)
 - [x] Stage 5: LLM exception triage and an employee equity FAQ agent
 - [x] Stage 6: vest-event readiness dashboard
-- [ ] Docs: process map, controls matrix, SOP
+- [x] Docs: process map, controls matrix, SOP
