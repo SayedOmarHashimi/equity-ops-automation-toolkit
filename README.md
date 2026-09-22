@@ -6,6 +6,8 @@ This project builds the tooling to catch those disagreements automatically. **St
 
 > All data is synthetic. Tax rates and plan rules are simplified and illustrative, and nothing here reflects any company's actual plan terms or tax guidance.
 
+**[Live dashboard →](https://equity-ops-automation-toolkit-vayckcw7r5w7lbdjcl3hmn.streamlit.app/)** (Stage 6, deployed on Streamlit Community Cloud, reading a committed [`sample_data/`](sample_data) snapshot)
+
 ![Vest-Event Readiness Dashboard](docs/images/dashboard.png)
 
 ## Quick start
