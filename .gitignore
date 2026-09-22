@@ -3,3 +3,9 @@ __pycache__/
 .venv/
 CLAUDE.md
 .claude/
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+dbt/warehouse.duckdb
+dbt/warehouse.duckdb.wal
+dbt/.user.yml

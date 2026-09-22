@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_hris_employees
+    description: Typed HRIS extract.
+    columns:
+      - name: employee_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_broker_releases
+    description: Typed broker share-release extract.
+    columns:
+      - name: release_ref
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_payroll_rsu
+    description: Typed payroll RSU-income extract.
+    columns:
+      - name: payroll_line_id
+        tests:
+          - unique
+          - not_null
+      - name: emp_id
+        description: >
+          Should always resolve to an HRIS employee_id. A failure here means
+          the payroll ID is malformed (e.g. missing its "E" prefix) - the
+          ID_FORMAT_MISMATCH control.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_hris_employees')
+                field: employee_id
+              config:
+                store_failures: true
