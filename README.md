@@ -6,6 +6,8 @@ This project builds the tooling to catch those disagreements automatically. **St
 
 > All data is synthetic. Tax rates and plan rules are simplified and illustrative, and nothing here reflects any company's actual plan terms or tax guidance.
 
+![Vest-Event Readiness Dashboard](docs/images/dashboard.png)
+
 ## Quick start
 
 ```bash

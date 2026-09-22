@@ -154,6 +154,6 @@ else:
     st.caption(
         f"Lifetime: {espp['employee_id'].nunique():,} unique participants, "
         f"{int(espp['shares_purchased'].sum()):,} shares purchased, "
-        f"${espp['discount_value'].sum():,.0f} total discount value, "
-        f"{int(espp['irs_limit_capped'].sum())} purchase events capped by the $25k IRS limit."
+        f"\\${espp['discount_value'].sum():,.0f} total discount value, "
+        f"{int(espp['irs_limit_capped'].sum())} purchase events capped by the \\$25k IRS limit."
     )
